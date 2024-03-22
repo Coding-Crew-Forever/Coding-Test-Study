@@ -2,13 +2,12 @@ from itertools import permutations
 
 def solution(numbers):
     answer = []
-    nums = [i for i in numbers]
     perm = []
     
     for i in range(1, len(numbers)+1):
-        perm += permutations(nums, i)
+        perm += permutations(numbers, i)
         
-    new_nums = [int(("").join(i)) for i in perm]
+    new_nums = [int("".join(i)) for i in perm]
     
     for i in new_nums:
         if i < 2:
