@@ -1,6 +1,6 @@
 import java.util.*;
 
-class Solution {
+class PGS_42586 {
     public ArrayList solution(int[] progresses, int[] speeds) {
         ArrayList<Integer> answer = new ArrayList<>();
         Queue<Integer> queue = new LinkedList<>();
