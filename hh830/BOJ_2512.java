@@ -18,7 +18,7 @@ public class Main {
 
         int M = Integer.parseInt(bufferedReader.readLine()); //총 예산
 
-        Arrays.sort(arr); //int arr는 에러남. Integer arr
+        Arrays.sort(arr);
 
         if(M < sum){
             // 상한가 결정이 필요한 경우 - 이분탐색
