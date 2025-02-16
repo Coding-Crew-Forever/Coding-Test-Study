@@ -1,11 +1,7 @@
-# This is a basic workflow to help you get started with Actions
-
 name: "Auto Merge PR on Sunday"
 
-# Controls when the workflow will run
 on:
   schedule:
-    # 한국 시간 23:59 (UTC 14:59)
     - cron: "59 14 * * 0"
   workflow_dispatch:
 
@@ -38,7 +34,23 @@ jobs:
                 }
               }
             }`
-
+            
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+            const retry = async (fn, retries = 2, delay = 5000) => {
+              for (let i = 0; i < retries; i++) {
+                try {
+                  return await fn();
+                } catch (error) {
+                  if (i === retries - 1) throw error;
+                  if (error.status === 405) {
+                    await sleep(delay);
+                    continue;
+                  }
+                  throw error;
+                }
+              }
+            };
+            
             const {repository:{pullRequests:{edges: list}}} = await github.graphql(query, {
               owner: context.repo.owner,
               name: context.repo.repo,
@@ -50,24 +62,23 @@ jobs:
                 issue_number: node.number,
                 body
               })
-
               try {
                 const labels = node.labels.nodes.map(label => label.name)
                 if (!labels.includes("ready for merge")) {
                   await createComment("'ready for merge' 라벨이 필요합니다.")
                   continue
                 }
-
                 if (node.mergeable === "CONFLICTING") {
                   await createComment("충돌로 인해 자동 병합이 불가능합니다.")
                   continue
                 }
-
-                await github.rest.pulls.merge({
+                
+                await sleep(5000); // 병합 전 5초 대기
+                await retry(() => github.rest.pulls.merge({
                   ...context.repo,
                   pull_number: node.number,
                   merge_method: "merge"
-                })
+                }));
                 
                 await createComment("자동 병합이 완료되었습니다.")
               } catch (e) {
