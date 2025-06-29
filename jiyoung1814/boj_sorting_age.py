@@ -12,3 +12,4 @@ sorted_arr = sorted(arr, key = lambda x: x[0])
 
 for value in sorted_arr:
     print(value[0], value[1])
+l
