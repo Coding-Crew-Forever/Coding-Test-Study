@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class BOJ_1012 {
+public class Main {
     static int worm; // 지렁이 수
     static boolean[][] arr;
     static boolean[][] visited;
@@ -9,7 +9,8 @@ public class BOJ_1012 {
     static int N;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine()); // T : 테스트 케이스의 개수
+
+        int T = Integer.parseInt(br.readLine()); 
    
         for(int i = 0; i < T; i++){
             worm = 0; // 지렁이 수 초기화
