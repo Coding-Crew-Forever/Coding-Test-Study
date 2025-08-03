@@ -1,0 +1,17 @@
+# 프로그래머스
+# Lv2 연속 부분 수열 합의 개수
+
+
+def solution(elements):
+    answer = set()
+    
+    element_length = len(elements)
+    
+    # [7, 9, 1, 1, 4, 7, 9, 1, 1, 4]
+    elements = elements * 2
+    
+    for i in range(element_length):
+        for j in range(element_length):
+            answer.add(sum(elements[j:j+i+1]))
+    
+    return len(answer)
