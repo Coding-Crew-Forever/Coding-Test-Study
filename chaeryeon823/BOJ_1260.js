@@ -6,14 +6,13 @@ const rl = readline.createInterface({
 });
 
 const input = [];
-rl.on("line", (line) => {
-  input.push(line.trim());
-}).on("close", () => {
-  const [N, M, V] = input.split(" ").map(Number);
+rl.on("line", (line) => input.push(line.trim()));
+rl.on("close", () => {
+  const [N, M, V] = input[0].split(" ").map(Number);
   const graph = Array.from({ length: N + 1 }, () => []);
 
   for (let i = 1; i <= M; i++) {
-    const [a, b] = input.split(" ").map(Number);
+    const [a, b] = input[i].split(" ").map(Number);
     graph[a].push(b);
     graph[b].push(a);
   }
@@ -22,31 +21,33 @@ rl.on("line", (line) => {
     graph[i].sort((a, b) => a - b);
   }
 
-  let visited = Array(N + 1).fill(false);
-  const dfs_result = [];
+  // DFS
+  const visitedDFS = Array(N + 1).fill(false);
+  const dfsResult = [];
 
   function dfs(v) {
-    visited[v] = true;
-    dfs_result.push(v);
+    visitedDFS[v] = true;
+    dfsResult.push(v);
     for (const next of graph[v]) {
-      if (!visited[next]) dfs(next);
+      if (!visitedDFS[next]) dfs(next);
     }
   }
 
   dfs(V);
 
-  visited.fill(false);
-  const bfs_result = [];
+  // BFS
+  const visitedBFS = Array(N + 1).fill(false);
+  const bfsResult = [];
 
   function bfs(v) {
     const queue = [v];
-    visited[v] = true;
+    visitedBFS[v] = true;
     while (queue.length) {
       const node = queue.shift();
-      bfs_result.push(node);
+      bfsResult.push(node);
       for (const next of graph[node]) {
-        if (!visited[next]) {
-          visited[next] = true;
+        if (!visitedBFS[next]) {
+          visitedBFS[next] = true;
           queue.push(next);
         }
       }
@@ -55,6 +56,6 @@ rl.on("line", (line) => {
 
   bfs(V);
 
-  console.log(dfs_result.join(" "));
-  console.log(bfs_result.join(" "));
+  console.log(dfsResult.join(" "));
+  console.log(bfsResult.join(" "));
 });
